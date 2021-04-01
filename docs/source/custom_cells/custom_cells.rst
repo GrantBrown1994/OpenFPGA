@@ -4,15 +4,15 @@ Skywater Custom Multiplexer Cells
 
 
 Background
-=========================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Traditionally, larger multiplexers are built through levels of smaller multiplexers as illustrated below:
+Traditionally, larger multiplexers are built using trees of smaller multiplexers as illustrated below:
 
 .. image:: figures/mux_tree.png
     :align: center
     :alt: Traditional Multiplexer Tree
 
-These multiplexers lead to large power and timing constraints that limit FPGA performance. FPGA fabrics use complementary pass gate logic (CPL) to replace multiplexer trees with single level inverted transmission gate derived multiplexers, as illustrated below:
+Multiplexers trees lead to large power and timing constraints that limit FPGA performance. FPGA fabrics use complementary pass gate logic (CPL) to replace multiplexer trees with single level inverted transmission gate derived multiplexers, as illustrated below:
 
 .. image:: figures/fpga_mux.png
     :height: 400px
@@ -20,12 +20,12 @@ These multiplexers lead to large power and timing constraints that limit FPGA pe
     :align: center
     :alt: Single Level FPGA Multiplexer
 
-Single level multiplexers are controlled through configuration SRAM cells which enable high impedance connections throughout the multiplexer hierarchy, thereby removing the need for hierarchical designs of multiplexers.  Therefore, the CPL multiplexers enable increased performance and reduced power consumption through FPGA fabrics. Standard cells required for CPL multiplexers are not commonly included in PDKs, thereby requiring the need for custom cell creation to enable FPGA multiplexer hierarchies. The remainder of this document is dedicate to the architecture and performance of our *sky130_uuopenfpga_cc_hd_invmux2_1*/*sky130_uuopenfpga_cc_hd_invmux3_1* cells followed by a 4-to-1 multiplexer and 6-to-1 multiplexer made from our cells and standard multiplexer cells provided within the Skywater 130nm PDK.
+Single level multiplexers are controlled through configuration SRAM cells which enable high impedance connections throughout the multiplexer hierarchy, thereby removing the need for hierarchical designs of multiplexers.  Therefore, the CPL multiplexers enable increased performance and reduced power consumption throughout FPGA fabrics. Standard cells required for CPL multiplexers are not commonly included in PDKs, thereby requiring the need for custom cell creation to enable FPGA multiplexer hierarchies. The remainder of this document is dedicated to the architecture and performance evaluation of our *sky130_uuopenfpga_cc_hd_invmux2_1*/*sky130_uuopenfpga_cc_hd_invmux3_1* custom cells generated using the Skywater 130nm PDK. A comparison is achieved by generating 4-to-1 multiplexer and 6-to-1 multiplexers made from our cells and standard cells provided within the Skywater 130nm PDK.
 
 .. INVMUX2_1
 
 SKY130_UUOPENFPGA_CC_HD_INVMUX2_1
-=========================================================
+---------------------------------------------------------
 
 - Usage: 2-Input Transmission Gate Multiplexer with Unity Drive Strength Inverter Input
     -Pins: 
@@ -49,9 +49,9 @@ SKY130_UUOPENFPGA_CC_HD_INVMUX2_1
     :align: center
     :alt: Sky130_uuopenfpga_cc_hd_invmux2_1 Layout
 
-- Comparison: To provide contrast on the use case of the *sky130_uuopenfpga_cc_hd_invmux2_1* cell we built a 4-to-1 multiplexer tree using the *sky130_fd_sc_hd__mux2_1* as the root cell of the multiplexer tree. The *sky130_uuopenfpga_cc_hd_invmux2_1* is used to build a single level 4-to-1 multiplexer with an inverted output.
+- Comparison: To demonstrate the performance gains using CPL multiplexers, we built a 4-1 single level multiplexer using our custom *sky130_uuopenfpga_cc_hd_invmux2_1* cell along with a 4-to-1 multiplexer using the *sky130_fd_sc_hd__mux2_1* as the root cell of the multiplexer tree.
 
-The *sky130_fd_sc_hd_mux2_1* multiplexer is built using a static CMOS structure with a single select input, whereas our cell uses a fractured select hierarchy. To perform the comparisons we have tabulated values in regards to power, area, and timing for the 4-to-1 multiplexer tree using Synopsys PrimeTime.
+The *sky130_fd_sc_hd_mux2_1* multiplexer is built using a static CMOS structure with a single select input, whereas our cell uses a fractured select hierarchy. To perform the comparisons we have tabulated values in regards to power, area, and timing for the 4-to-1 multiplexer tree using Cadence ADE XL.
 
 - Power:
       - sky130_uuopenfpga_cc_hd_invmux2_1:  2.37 μW
@@ -71,14 +71,16 @@ Our multiplexer implementation requires equal area neglecting interconnect overh
 
 Our custom multiplexer provides over a 31\% reduction in propagation delay.
 
-.. _SKY130_UUOPENFPGA_CC_HD_INVMUX2_1: https://github.com/GrantBrown1994/OpenFPGA/tree/master/docs/source/custom_cells/cell_eval/SKY130_UUOPENFPGA_CC_HD_INVMUX2_1.pdf
+`SKY130_UUOPENFPGA_CC_HD_INVMUX2_1 Cell Characterization`_
+
+.. _`SKY130_UUOPENFPGA_CC_HD_INVMUX2_1 Cell Characterization`: https://github.com/GrantBrown1994/OpenFPGA/blob/master/docs/source/custom_cells/cell_eval/SKY130_UUOPENFPGA_CC_HD_INVMUX2_1.pdf
 
 .. INVMUX2_1
 
 .. INVMUX3_1
 
 SKY130_UUOPENFPGA_CC_HD_INVMUX3_1
-=========================================================
+---------------------------------------------------------
 
 - Usage: 3-Input Transmission Gate Multiplexer with Unity Drive Strength Inverter Input
     - Pins:
@@ -102,9 +104,9 @@ SKY130_UUOPENFPGA_CC_HD_INVMUX3_1
     :align: center
     :alt: Sky130_uuopenfpga_cc_hd_invmux3_1 Layout
 
-- Comparison: To provide contrast on the use case of the *sky130_uuopenfpga_cc_hd_invmux3_1* cell, we built a 6-to-1 multiplexer tree using the *sky130_fd_sc_hd__mux4_1* and *sky130_fd_sc_hd__mux2_1* as the root cells of the multiplexer tree. The *sky130_uuopenfpga_cc_hd_invmux3_1* is used to build a single level 6-to-1 multiplexer with an inverted output.
+- Comparison: To demonstrate the performance gains using CPL multiplexers, we built a 6-1 single level multiplexer using our custom *sky130_uuopenfpga_cc_hd_invmux3_1* cell along with a 6-to-1 multiplexer using the *sky130_fd_sc_hd__mux4/2_1* as the root cells of the multiplexer tree.
 
-The *sky130_fd_sc_hd__mux4/2_1* cell are built using a static CMOS structure with a single select input, whereas our cell uses a fractured select hierarchy. To perform the comparisons we have tabulated values in regards to power, area, and timing for the 4-to-1 multiplexer tree using Synopsys PrimeTime and Cadence ADE XL.
+To perform the comparisons we have tabulated values in regards to power, area, and timing for the 4-to-1 multiplexer tree using Cadence ADE XL.
 
 - Power:
       - sky130_uuopenfpga_cc_hd_invmux3_1:  2.96 μW
@@ -124,6 +126,8 @@ The Skywater multiplexer provides a 20\% reduction in area.
 
 Our custom multiplexer provides over a 27\% reduction in propagation delay.
 
-.. _SKY130_UUOPENFPGA_CC_HD_INVMUX3_1: https://github.com/GrantBrown1994/OpenFPGA/tree/master/docs/source/custom_cells/cell_eval/SKY130_UUOPENFPGA_CC_HD_INVMUX3_1.pdf
+`SKY130_UUOPENFPGA_CC_HD_INVMUX3_1 Cell Characterization`_
+
+.. _`SKY130_UUOPENFPGA_CC_HD_INVMUX3_1 Cell Characterization`: https://github.com/GrantBrown1994/OpenFPGA/blob/master/docs/source/custom_cells/cell_eval/SKY130_UUOPENFPGA_CC_HD_INVMUX3_1.pdf/
 
 .. INVMUX3_1
